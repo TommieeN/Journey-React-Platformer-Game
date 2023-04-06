@@ -3,7 +3,15 @@ import BackgroundImage from "../../Assets/background.png";
 import Data from "../../MapData/platformer-map.json";
 import Player from "../../Classes/Player";
 import Sprite from "../../Classes/Sprite";
-import FloorCollision from "../../Utils/FloorCollision";
+import PlayerIdle from "../../Assets/warrior/Idle.png";
+import PlayerIdleLeft from "../../Assets/warrior/IdleLeft.png";
+import PlayerRun from "../../Assets/warrior/Run.png";
+import PlayerRunLeft from "../../Assets/warrior/RunLeft.png";
+import PlayerJump from "../../Assets/warrior/Jump.png";
+import PlayerJumpLeft from "../../Assets/warrior/JumpLeft.png";
+import PlayerFall from "../../Assets/warrior/Fall.png";
+import PlayerFallLeft from "../../Assets/warrior/FallLeft.png";
+// import FloorCollision from "../../Utils/FloorCollision";
 // import PlatformCollision from "../../Utils/PlatformCollision";
 // import "./Canvas.scss";
 
@@ -24,7 +32,6 @@ function Canvas() {
       height: canvas.height / 4,
     };
 
-    // COLLISION BLOCKS
     class CollisionBlock {
       constructor({ position, height = 16 }) {
         this.position = position;
@@ -85,16 +92,59 @@ function Canvas() {
       });
     });
 
-
     const player = new Player({
       position: {
         x: 100,
         y: 300,
       },
+      ctx,
       collisionBlocks,
       platformCollisionBlocks,
-      ctx,
       gravity,
+      imageSrc: PlayerIdle,
+      frameRate: 8,
+      animations: {
+        Idle: {
+          imageSrc: PlayerIdle,
+          frameRate: 8,
+          frameBuffer: 3,
+        },
+        IdleLeft: {
+          imageSrc: PlayerIdleLeft,
+          frameRate: 8,
+          frameBuffer: 3,
+        },
+        Run: {
+          imageSrc: PlayerRun,
+          frameRate: 8,
+          frameBuffer: 5,
+        },
+        RunLeft: {
+          imageSrc: PlayerRunLeft,
+          frameRate: 8,
+          frameBuffer: 5,
+        },
+        Jump: {
+          imageSrc: PlayerJump,
+          frameRate: 2,
+          frameBuffer: 3,
+        },
+        JumpLeft: {
+          imageSrc: PlayerJumpLeft,
+          frameRate: 2,
+          frameBuffer: 3,
+        },
+        Fall: {
+          imageSrc: PlayerFall,
+          frameRate: 2,
+          frameBuffer: 3,
+        },
+        FallLeft: {
+          imageSrc: PlayerFallLeft,
+          frameRate: 2,
+          frameBuffer: 3,
+        },
+      },
     });
 
     // KEYS FOR PLAYER MOVEMENT
@@ -139,8 +189,30 @@ function Canvas() {
       player.update();
 
       player.velocity.x = 0;
-      if (keys.d.pressed) player.velocity.x = 3;
-      else if (keys.a.pressed) player.velocity.x = -3;
+      if (keys.d.pressed) {
+        player.switchSprite("Run");
+        player.velocity.x = 3;
+        player.lastDirection = "right"
+      } else if (keys.a.pressed) {
+        player.switchSprite("RunLeft");
+        player.velocity.x = -3;
+        player.lastDirection = "left"
+      } else if (player.velocity.y === 0) {
+        if (player.lastDirection === "right")
+        player.switchSprite("Idle")
+        else player.switchSprite("IdleLeft")
+      }
+
+      if (player.velocity.y < 0) {
+        if (player.lastDirection === "right")
+        player.switchSprite("Jump")
+        else player.switchSprite("JumpLeft")
+      } else if (player.velocity.y > 0) {
+        if (player.lastDirection === "right")
+        player.switchSprite("Fall")
+        else player.switchSprite("FallLeft")
+      } 
+
       ctx.restore();
     };
 
@@ -184,4 +256,3 @@ function Canvas() {
 }
 
 export default Canvas;
-
