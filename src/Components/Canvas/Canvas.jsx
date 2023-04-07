@@ -11,15 +11,13 @@ import PlayerJump from "../../Assets/warrior/Jump.png";
 import PlayerJumpLeft from "../../Assets/warrior/JumpLeft.png";
 import PlayerFall from "../../Assets/warrior/Fall.png";
 import PlayerFallLeft from "../../Assets/warrior/FallLeft.png";
-// import FloorCollision from "../../Utils/FloorCollision";
-// import PlatformCollision from "../../Utils/PlatformCollision";
-// import "./Canvas.scss";
+import "./Canvas.scss";
 
 function Canvas() {
   const canvasRef = useRef(null);
   const floorCollisionData = Data.layers[7].data;
   const platformCollisionData = Data.layers[8].data;
-  const gravity = 0.5;
+  const gravity = 0.1;
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -86,11 +84,20 @@ function Canvas() {
                 x: x * 16,
                 y: y * 16,
               },
+              height: 4,
             })
           );
         }
       });
     });
+    const backgroundImageHeight = 432;
+
+    const camera = {
+      position: {
+        x: 0,
+        y: -backgroundImageHeight + scaledCanvas.height,
+      },
+    };
 
     const player = new Player({
       position: {
@@ -98,6 +105,8 @@ function Canvas() {
         y: 300,
       },
       ctx,
+      canvas,
+      camera,
       collisionBlocks,
       platformCollisionBlocks,
       gravity,
@@ -171,47 +180,49 @@ function Canvas() {
     const animate = () => {
       requestAnimationFrame(animate);
       ctx.fillStyle = "black";
-      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      ctx.fillRect(camera.position.x, 0, canvas.width, canvas.height);
 
       //THIS WILL STOP THE ANIMATION FROM SCALING THE BACKGROUND CONTINUOUSLY
       ctx.save();
       ctx.scale(4, 4);
-      ctx.translate(0, -background.image.height + scaledCanvas.height);
+      ctx.translate(camera.position.x, camera.position.y);
       background.update();
 
-      collisionBlocks.forEach((collisionBlock) => {
-        collisionBlock.update();
-      });
-      platformCollisionBlocks.forEach((block) => {
-        block.update();
-      });
+      // collisionBlocks.forEach((collisionBlock) => {
+      //   collisionBlock.update();
+      // });
+      // platformCollisionBlocks.forEach((block) => {
+      //   block.update();
+      // });
 
+      player.checkForHorizontalCanvasCollision();
       player.update();
 
       player.velocity.x = 0;
       if (keys.d.pressed) {
         player.switchSprite("Run");
-        player.velocity.x = 3;
-        player.lastDirection = "right"
+        player.velocity.x = 2;
+        player.lastDirection = "right";
+        player.shouldPanCameraToTheLeft();
       } else if (keys.a.pressed) {
         player.switchSprite("RunLeft");
-        player.velocity.x = -3;
-        player.lastDirection = "left"
+        player.velocity.x = -2;
+        player.lastDirection = "left";
+        player.shouldPanCameraToTheRight();
       } else if (player.velocity.y === 0) {
-        if (player.lastDirection === "right")
-        player.switchSprite("Idle")
-        else player.switchSprite("IdleLeft")
+        if (player.lastDirection === "right") player.switchSprite("Idle");
+        else player.switchSprite("IdleLeft");
       }
 
       if (player.velocity.y < 0) {
-        if (player.lastDirection === "right")
-        player.switchSprite("Jump")
-        else player.switchSprite("JumpLeft")
+        player.shouldPanCameraDown();
+        if (player.lastDirection === "right") player.switchSprite("Jump");
+        else player.switchSprite("JumpLeft");
       } else if (player.velocity.y > 0) {
-        if (player.lastDirection === "right")
-        player.switchSprite("Fall")
-        else player.switchSprite("FallLeft")
-      } 
+        player.shouldPanCameraUp();
+        if (player.lastDirection === "right") player.switchSprite("Fall");
+        else player.switchSprite("FallLeft");
+      }
 
       ctx.restore();
     };
@@ -228,7 +239,7 @@ function Canvas() {
           keys.a.pressed = true;
           break;
         case "w":
-          player.velocity.y = -8;
+          player.velocity.y = -4;
           break;
         default:
       }
@@ -248,9 +259,9 @@ function Canvas() {
 
   return (
     <>
-      {/* <div className="game-container"> */}
+      <div className="game-container">
       <canvas ref={canvasRef}></canvas>
-      {/* </div> */}
+      </div>
     </>
   );
 }
