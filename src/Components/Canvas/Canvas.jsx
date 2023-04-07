@@ -3,6 +3,7 @@ import BackgroundImage from "../../Assets/background.png";
 import Data from "../../MapData/platformer-map.json";
 import Player from "../../Classes/Player";
 import Sprite from "../../Classes/Sprite";
+import CollisionBlock from "../../Classes/CollisionBlock";
 import PlayerIdle from "../../Assets/warrior/Idle.png";
 import PlayerIdleLeft from "../../Assets/warrior/IdleLeft.png";
 import PlayerRun from "../../Assets/warrior/Run.png";
@@ -11,6 +12,7 @@ import PlayerJump from "../../Assets/warrior/Jump.png";
 import PlayerJumpLeft from "../../Assets/warrior/JumpLeft.png";
 import PlayerFall from "../../Assets/warrior/Fall.png";
 import PlayerFallLeft from "../../Assets/warrior/FallLeft.png";
+import MusicBtn from "../MusicBtn/MusicBtn";
 import "./Canvas.scss";
 
 function Canvas() {
@@ -21,7 +23,7 @@ function Canvas() {
 
   useEffect(() => {
     const canvas = canvasRef.current;
-    const ctx = canvas.getContext("2d"); //C STANDS FOR CONTEXT
+    const ctx = canvas.getContext("2d");
     canvas.width = 1024;
     canvas.height = 576;
 
@@ -30,23 +32,7 @@ function Canvas() {
       height: canvas.height / 4,
     };
 
-    class CollisionBlock {
-      constructor({ position, height = 16 }) {
-        this.position = position;
-        this.width = 16;
-        this.height = height;
-      }
-      draw() {
-        ctx.fillStyle = "rgba(255, 0, 0, 0.5)";
-        ctx.fillRect(this.position.x, this.position.y, this.width, this.height);
-      }
-
-      update() {
-        this.draw();
-      }
-    }
-
-    // GRABBING FLOOR AND PLATFORM DATA FROM JSON
+    // CREATE AND PARSE 2D DATA FROM JSON
     const floorCollisions2D = [];
     for (let i = 0; i < floorCollisionData.length; i += 36) {
       const floorCollision = floorCollisionData.slice(i, i + 36);
@@ -101,7 +87,7 @@ function Canvas() {
 
     const player = new Player({
       position: {
-        x: 100,
+        x: 0,
         y: 300,
       },
       ctx,
@@ -260,7 +246,10 @@ function Canvas() {
   return (
     <>
       <div className="game-container">
-      <canvas ref={canvasRef}></canvas>
+        <canvas ref={canvasRef}></canvas>
+        <div className="btn-canvas">
+          <MusicBtn />
+        </div>
       </div>
     </>
   );

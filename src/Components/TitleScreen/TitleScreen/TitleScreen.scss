@@ -1,0 +1,34 @@
+* {
+    margin: 0;
+    padding: 0;
+    font-family: 'Press Start 2P', cursive;
+}
+
+.title-screen {
+    color: white;
+    display: flex;
+    height: 100vh;
+    justify-content: center;
+    align-items: center;
+    background-image: url(../../../Assets/Title/TitleScreen.png);
+    background-size: cover;
+    &__container {
+        display: flex;
+        align-items: center;
+        flex-direction: column;
+        gap: 2rem;
+    }
+    &__text-container {
+        background-color: rgba($color: #000000, $alpha: 0.7);
+    }
+    &__text {
+        animation: fadeIn 5s infinite;
+        padding: 1rem;
+        font-size: 2rem;
+    }
+    @keyframes fadeIn {
+        0% { opacity: 0;}
+        50% {opacity: 1;}
+        100% {opacity: 0;}
+    }
+}

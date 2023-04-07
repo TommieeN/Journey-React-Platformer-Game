@@ -1,0 +1,27 @@
+import React from "react";
+import "./TitleScreen.scss";
+import MusicBtn from "../../MusicBtn/MusicBtn";
+
+function TitleScreen({ onStartGame }) {
+  const handleKeyDown = (event) => {
+    if (event.key === "Enter") {
+      console.log(handleKeyDown);
+      onStartGame();
+    }
+  };
+
+  return (
+    <div className="title-screen">
+      <div className="title-screen__container" onKeyDown={handleKeyDown} tabIndex="0">
+        <div className="title-screen__text-container">
+        <p className="title-screen__text">Press Enter to Start Game</p>
+        </div>
+        <MusicBtn />
+      </div>
+      <div></div>
+      
+    </div>
+  );
+}
+
+export default TitleScreen;

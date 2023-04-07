@@ -1,11 +1,20 @@
-import React from "react";
-import Canvas from "./Components/Canvas/Canvas"
+import React, { useState } from "react";
+import Canvas from "./Components/Canvas/Canvas";
+import TitleScreen from "./Components/TitleScreen/TitleScreen/TitleScreen";
 
 const App = () => {
+  const [gameStarted, setGameStarted] = useState(false);
+
+  const handleStartGame = () => {
+    setGameStarted(true);
+  };
+
   return (
-    <Canvas />
-  )
-}
-  
+    <div>
+      {gameStarted === false && <TitleScreen onStartGame={handleStartGame} />}
+      {gameStarted === true && <Canvas />}    
+    </div>
+  );
+};
 
 export default App;
