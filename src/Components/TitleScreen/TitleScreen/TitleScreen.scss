@@ -4,19 +4,27 @@
     font-family: 'Press Start 2P', cursive;
 }
 
+h1 {
+    font-size: 5rem;
+    background: rgb(0, 0, 0);
+    color: white;
+    border: white 3px solid;
+    padding: 2rem;
+}
+
 .title-screen {
     color: white;
     display: flex;
     height: 100vh;
     justify-content: center;
     align-items: center;
-    background-image: url(../../../Assets/Title/TitleScreen.png);
+    background-image: url(../../../Assets/peakpx.jpg);
     background-size: cover;
     &__container {
         display: flex;
         align-items: center;
         flex-direction: column;
-        gap: 2rem;
+        gap: 10rem;
     }
     &__text-container {
         background-color: rgba($color: #000000, $alpha: 0.7);

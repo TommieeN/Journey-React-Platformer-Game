@@ -13,7 +13,9 @@ function TitleScreen({ onStartGame }) {
   return (
     <div className="title-screen">
       <div className="title-screen__container" onKeyDown={handleKeyDown} tabIndex="0">
+        <h1>Journey</h1>
         <div className="title-screen__text-container">
+          
         <p className="title-screen__text">Press Enter to Start Game</p>
         </div>
         <MusicBtn />

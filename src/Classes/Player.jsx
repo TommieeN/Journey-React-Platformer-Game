@@ -16,6 +16,8 @@ export default class Player extends Sprite {
     frameRate,
     scale = 0.5,
     animations,
+    health = 100,
+    isAttacking
   }) {
     super({ imageSrc, frameRate, scale });
     this.position = position;
@@ -23,6 +25,7 @@ export default class Player extends Sprite {
       x: 0,
       y: 1,
     };
+    this.isAttacking = isAttacking
     this.gravity = gravity;
     this.collisionBlocks = collisionBlocks;
     this.platformCollisionBlocks = platformCollisionBlocks;
@@ -39,6 +42,7 @@ export default class Player extends Sprite {
     this.animations = animations;
     this.lastDirection = "right";
     this.camera = camera;
+    this.health = health
 
     for (let key in this.animations) {
       const image = new Image();
@@ -55,6 +59,37 @@ export default class Player extends Sprite {
       width: 200,
       height: 80,
     };
+    this.attackBox = {
+      position: {
+        x: this.position.x,
+        y: this.position.y,
+      },
+      width: 35,
+      height: 20,
+    };
+    
+  }
+
+
+
+  // draw() {
+  //   this.ctx.fillStyle = "red"
+  //   this.ctx.fillRect(this.position.x, this.position.y, 50, this.height)
+
+  //   this.ctx.fillStyle = "green"
+  //   this.ctx.fillRect(
+  //     this.attackBox.position.x,
+  //     this.attackBox.position.y,
+  //     this.attackBox.width,
+  //     this.attackBox.height
+  //   )
+  // }
+
+  takeDamage(damageAmount) {
+    this.health -= damageAmount;
+    if(this.health <= 0){
+      this.health = 0
+    }
   }
 
   switchSprite(key) {
@@ -156,6 +191,15 @@ export default class Player extends Sprite {
     //   this.hitbox.width,
     //   this.hitbox.height
     // );
+    if (this.isAttacking) {
+    this.ctx.fillStyle = "green"
+    this.ctx.fillRect(
+      this.attackBox.position.x,
+      this.attackBox.position.y,
+      this.attackBox.width,
+      this.attackBox.height
+    )
+    }
 
     this.draw();
 
@@ -165,8 +209,14 @@ export default class Player extends Sprite {
     this.applyGravity();
     this.updateHitbox();
     this.CheckForVerticalCollisions();
+    this.updateAttackbox();
   }
-
+  attack() {
+    this.isAttacking = true
+    setTimeout(() => {
+      this.isAttacking = false
+    }, 100)
+  }
   updateHitbox() {
     this.hitbox = {
       position: {
@@ -177,6 +227,17 @@ export default class Player extends Sprite {
       height: 27,
     };
   }
+  updateAttackbox() {
+    this.attackBox = {
+      position: {
+        x: this.position.x + 40,
+        y: this.position.y + 29,
+      },
+      width: 35,
+      height: 20,
+    };
+  }
+
 
   CheckForHorizontalCollisions() {
     for (let i = 0; i < this.collisionBlocks.length; i++) {

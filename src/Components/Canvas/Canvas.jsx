@@ -3,7 +3,9 @@ import BackgroundImage from "../../Assets/background.png";
 import Data from "../../MapData/platformer-map.json";
 import Player from "../../Classes/Player";
 import Sprite from "../../Classes/Sprite";
+import Enemy from "../../Classes/Enemy";
 import CollisionBlock from "../../Classes/CollisionBlock";
+import KnightIdle from "../../Assets/Enemies/Knight/Idle.png";
 import PlayerIdle from "../../Assets/warrior/Idle.png";
 import PlayerIdleLeft from "../../Assets/warrior/IdleLeft.png";
 import PlayerRun from "../../Assets/warrior/Run.png";
@@ -12,7 +14,7 @@ import PlayerJump from "../../Assets/warrior/Jump.png";
 import PlayerJumpLeft from "../../Assets/warrior/JumpLeft.png";
 import PlayerFall from "../../Assets/warrior/Fall.png";
 import PlayerFallLeft from "../../Assets/warrior/FallLeft.png";
-import MusicBtn from "../MusicBtn/MusicBtn";
+// import MusicBtn from "../MusicBtn/MusicBtn";
 import "./Canvas.scss";
 
 function Canvas() {
@@ -140,6 +142,23 @@ function Canvas() {
           frameBuffer: 3,
         },
       },
+      hitbox: {
+        width: 10,
+        height: 10,
+      },
+    });
+
+    const enemy = new Enemy({
+      position: {
+        x: 100,
+        y: 350,
+      },
+      ctx,
+      collisionBlocks,
+      platformCollisionBlocks,
+      gravity,
+      imageSrc: KnightIdle,
+      frameRate: 11,
     });
 
     // KEYS FOR PLAYER MOVEMENT
@@ -183,6 +202,7 @@ function Canvas() {
 
       player.checkForHorizontalCanvasCollision();
       player.update();
+      enemy.update();
 
       player.velocity.x = 0;
       if (keys.d.pressed) {
@@ -210,6 +230,36 @@ function Canvas() {
         else player.switchSprite("FallLeft");
       }
 
+
+      // Can refactor
+      if (
+        player.attackBox.position.x + player.attackBox.width >=
+          enemy.hitbox.position.x &&
+        player.attackBox.position.x <= enemy.hitbox.position.x + enemy.hitbox.width &&
+        player.attackBox.position.y + player.attackBox.height >=
+          enemy.hitbox.position.y &&
+        player.attackBox.position.y <= enemy.hitbox.position.y + enemy.hitbox.height &&
+        player.isAttacking
+      ) {
+        player.isAttacking = false
+        console.log("go");
+      }
+
+      // if (
+      //   enemy.hitbox &&
+      //   player.hitbox &&
+      //   enemy.hitbox.position.x <
+      //     player.hitbox.position.x + player.hitbox.width &&
+      //   enemy.hitbox.position.x + enemy.hitbox.width >
+      //     player.hitbox.position.x &&
+      //   enemy.hitbox.position.y <
+      //     player.hitbox.position.y + player.hitbox.height &&
+      //   enemy.hitbox.height + enemy.hitbox.position.y > player.hitbox.position.y
+      // ) {
+      //   // player.takeDamage(1);
+      //   console.log("taking damage: ")
+      // }
+
       ctx.restore();
     };
 
@@ -226,6 +276,9 @@ function Canvas() {
           break;
         case "w":
           player.velocity.y = -4;
+          break;
+        case " ":
+          player.attack();
           break;
         default:
       }
@@ -247,9 +300,7 @@ function Canvas() {
     <>
       <div className="game-container">
         <canvas ref={canvasRef}></canvas>
-        <div className="btn-canvas">
-          <MusicBtn />
-        </div>
+        <div className="btn-canvas">{/* <MusicBtn /> */}</div>
       </div>
     </>
   );
