@@ -20,3 +20,26 @@ canvas {
     width: 100%;
     opacity: 0.5;
 }
+
+.touch-control-right {
+    position: absolute;
+    color: white;
+    left: 50rem;
+    top: 20rem;
+}
+
+.touch-control-left {
+    position: absolute;
+    color: white;
+    left: 4rem;
+    top: 20rem;
+
+}
+
+.touch-control-jump {
+    position: absolute;
+    color: white;
+    left: 50rem;
+    top: 26rem;
+
+}

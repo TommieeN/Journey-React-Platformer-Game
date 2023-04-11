@@ -3,13 +3,12 @@ import BackgroundImage2 from "../../Assets/Background/newMapper.png"
 import Data2 from "../../MapData/newMapUpdated.json"
 import Player from "../../Classes/Player";
 import Sprite from "../../Classes/Sprite";
-// import Enemy from "../../Classes/Enemy";
+import Enemy from "../../Classes/Enemy";
 import CollisionBlock from "../../Classes/CollisionBlock";
-// import KnightIdle from "../../Assets/Enemies/Knight/Idle.png";
 import PlayerIdle from "../../Assets/warrior/Idle.png";
 import playerAnimations from "../../Utils/PlayerAnimations";
-// import enemyAnimations from "../../Utils/EnemyAnimations";
 import "./Canvas.scss";
+import EnemySprite from "../../Assets/Enemies/enemy_bat_3.png"
 // import PlayerHealth from "../../Utils/PlayerHealth";
 
 function Canvas() {
@@ -22,6 +21,7 @@ function Canvas() {
   useEffect(() => {
     const canvas = canvasRef.current;
     const ctx = canvas.getContext("2d");
+
     canvas.width = 1024;
     canvas.height = 576;
 
@@ -29,6 +29,9 @@ function Canvas() {
       width: canvas.width / 3,
       height: canvas.height / 3,
     };
+
+    const enemiesArray = []
+    const hordeEnemies = 15
 
 
     // CREATE AND PARSE 2D DATA FROM JSON
@@ -98,26 +101,30 @@ function Canvas() {
       imageSrc: PlayerIdle,
       frameRate: 8,
       playerAnimations,
-      attackDamage: 10,
       hitbox: {
         width: 10,
         height: 10,
       },
     });
 
-    // const enemy = new Enemy({
-    //   position: {
-    //     x: 0,
-    //     y: 400,
-    //   },
-    //   ctx,
-    //   collisionBlocks,
-    //   platformCollisionBlocks,
-    //   gravity,
-    //   imageSrc: KnightIdle,
-    //   frameRate: 11,
-    //   enemyAnimations,
-    // });
+    for (let i = 0; i < hordeEnemies; i ++){
+      const enemy = new Enemy({
+      position: {
+        x: 100,
+        y: 400,
+      },
+      hitbox: {
+        width: 100,
+        height: 100,
+      },
+      ctx,
+      canvas,
+      imageSrc: EnemySprite,
+      frameRate: 6,
+    });
+    enemiesArray.push(enemy)
+    }
+    
 
     //BACKGROUND IMAGE WITH SPRITE CLASS
     const background = new Sprite({
@@ -135,28 +142,46 @@ function Canvas() {
       ctx.fillStyle = "black";
       ctx.fillRect(camera.position.x, 0, canvas.width, canvas.height);
 
-      //THIS WILL STOP THE ANIMATION FROM SCALING THE BACKGROUND CONTINUOUSLY
       ctx.save();
       ctx.scale(3, 3);
       ctx.translate(camera.position.x, camera.position.y);
+
       background.update();
 
+      enemiesArray.forEach((enemy) => {
+        enemy.update()
+      })
+      
+
       player.checkForHorizontalCanvasCollision();
+
       player.update();
       
         
       ctx.restore();
     };
+    
     animate();
+    
 
   }, []);
 
   return (
-    <div className="game">
+    
+    <div className="game"><div className="touch-control-right">
+          RIGHT
+        </div>
     {/* <PlayerHealth /> */}
       <div className="game-container">
         <canvas ref={canvasRef}></canvas>
-        <div className="btn-canvas">{/* <MusicBtn /> */}</div>
+        <div className="touch-control-left">
+           LEFT 
+        </div>
+        <div className="touch-control-jump">
+          Jump
+        </div>
+        
+        {/* <div className="btn-canvas"><MusicBtn /></div> */}
       </div>
     </div>
   );

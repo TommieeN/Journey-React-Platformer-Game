@@ -15,11 +15,9 @@ export default class Player extends Sprite {
     frameRate = 1,
     scale = 0.5,
     playerAnimations,
-    isAttacking,
   }) {
     super({ imageSrc, frameRate, scale });
     this.position = position;
-    this.isAttacking = isAttacking;
     this.gravity = gravity;
     this.collisionBlocks = collisionBlocks;
     this.platformCollisionBlocks = platformCollisionBlocks;
@@ -53,9 +51,6 @@ export default class Player extends Sprite {
             if (event.key === "w") {
               this.Jump();
             }
-            break;
-          case " ":
-            this.player.attack();
             break;
           default:
         }
@@ -93,14 +88,6 @@ export default class Player extends Sprite {
       width: 200,
       height: 80,
     };
-    this.attackBox = {
-      position: {
-        x: this.position.x,
-        y: this.position.y,
-      },
-      width: 35,
-      height: 20,
-    };
 
     for (let key in this.animations) {
       const image = new Image();
@@ -118,7 +105,12 @@ export default class Player extends Sprite {
     this.frameRate = this.animations[key].frameRate;
     this.frameBuffer = this.animations[key].frameBuffer;
   }
-
+  // checkTouchMovement() {
+  //   this.velocity.x = 0;
+  //   this.switchSprite("Run");
+  //   this.velocity.x = 2;
+  //   this.lastDirection = "right";
+  // }
   checkMovement() {
     this.velocity.x = 0;
     if (this.keys.d.pressed) {
@@ -148,16 +140,18 @@ export default class Player extends Sprite {
 
     if (this.position.x > 1500) {
       this.position.x = 0;
-      this.position.y = 400;
+      this.position.y = 500;
       this.camera.position.x = 0;
-      this.camera.position.y = -this.backgroundImageHeight + this.scaledCanvas.height;
+      this.camera.position.y =
+        -this.backgroundImageHeight + this.scaledCanvas.height;
     }
 
     if (this.position.y > this.canvas.height) {
       this.position.x = 0;
       this.position.y = 400;
       this.camera.position.x = 0;
-      this.camera.position.y = -this.backgroundImageHeight + this.scaledCanvas.height;
+      this.camera.position.y =
+        -this.backgroundImageHeight + this.scaledCanvas.height;
     }
   }
 
@@ -237,7 +231,10 @@ export default class Player extends Sprite {
     this.applyGravity();
     this.updateHitbox();
     this.CheckForVerticalCollisions();
-    this.checkMovement();
+    // this.checkMovement();
+
+
+
   }
 
   updateHitbox() {
