@@ -1,7 +1,8 @@
 import Sprite from "./Sprite";
 import FloorCollision from "../Utils/FloorCollision";
 import PlatformCollision from "../Utils/PlatformCollision";
-
+// import enemyAnimations from "../Utils/EnemyAnimations";
+import { playerIsAttacking } from "../Utils/AttackCollision";
 export default class Enemy extends Sprite {
   constructor({
     position,
@@ -14,25 +15,27 @@ export default class Enemy extends Sprite {
     animations,
     scale = 0.465,
   }) {
-    super({ imageSrc, frameRate,scale });
+    super({ imageSrc, frameRate, scale });
     this.position = position;
     this.ctx = ctx;
     this.collisionBlocks = collisionBlocks;
     this.platformCollisionBlocks = platformCollisionBlocks;
     this.gravity = gravity;
     this.animations = animations;
+    this.health = 100;
+    this.isAlive = true;
     this.velocity = {
       x: 0,
       y: 1,
-    }
+    };
     this.hitbox = {
-        position: {
-            x: this.position.x,
-            y: this.position.y,
-        },
-        width: 10,
-        height: 10,
-    }
+      position: {
+        x: this.position.x,
+        y: this.position.y,
+      },
+      width: 10,
+      height: 10,
+    };
 
     for (let key in this.animations) {
       const image = new Image();
@@ -41,6 +44,7 @@ export default class Enemy extends Sprite {
       this.animations[key].image = image;
     }
   }
+
   switchSprite(key) {
     if (this.image === this.animations[key].image || !this.loaded) return;
 
@@ -49,7 +53,7 @@ export default class Enemy extends Sprite {
     this.frameRate = this.animations[key].frameRate;
     this.frameBuffer = this.animations[key].frameBuffer;
   }
-  
+
   CheckForHorizontalCollisions() {
     for (let i = 0; i < this.collisionBlocks.length; i++) {
       const collisionBlock = this.collisionBlocks[i];
@@ -136,6 +140,23 @@ export default class Enemy extends Sprite {
       }
     }
   }
+  
+  takeDamage(attackDamage) {
+    this.health -= attackDamage
+    // console.log("enemy health:",this.health)
+    if (this.health <= 0) {
+      this.isAlive = false
+      
+    }
+
+  }
+
+  // deathAnimation() {
+  //   if (!this.isAlive) {
+  //     this.switchSprite("KnightDeath");
+  //   }
+  // }
+
   update() {
     this.updateFrames();
 
@@ -148,15 +169,18 @@ export default class Enemy extends Sprite {
     this.updateHitbox();
     this.CheckForVerticalCollisions();
 
-        this.ctx.fillStyle = "rgba(255, 0, 0, 0.2)";
+    this.ctx.fillStyle = "rgba(255, 0, 0, 0.2)";
     this.ctx.fillRect(
       this.hitbox.position.x,
       this.hitbox.position.y,
       this.hitbox.width,
       this.hitbox.height
     );
+    this.takeDamage();
+    // this.deathAnimation();
+    
   }
-  
+
   applyGravity() {
     this.velocity.y += this.gravity;
     this.position.y += this.velocity.y;

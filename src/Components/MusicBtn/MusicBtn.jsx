@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import TitleTheme from '../../Assets/Music/Decisive-Battle.wav';
+import TitleTheme from '../../Assets/Music/Title-Theme.wav';
 import "./MusicBtn.scss";
 
 const MusicBtn = () => {
@@ -15,6 +15,8 @@ const MusicBtn = () => {
       setAudioOn(true);
     }
   };
+
+audio.loop = true
 
   return (
     <button className='btn' onClick={handleButtonClick}>

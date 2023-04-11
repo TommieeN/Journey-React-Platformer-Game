@@ -1,4 +1,3 @@
-// import Canvas from "../Components/Canvas/Canvas";
 import FloorCollision from "../Utils/FloorCollision";
 import PlatformCollision from "../Utils/PlatformCollision";
 import Sprite from "./Sprite";
@@ -13,24 +12,71 @@ export default class Player extends Sprite {
     platformCollisionBlocks,
     gravity,
     imageSrc,
-    frameRate,
+    frameRate = 1,
     scale = 0.5,
-    animations,
-    health = 100,
-    isAttacking
+    playerAnimations,
+    isAttacking,
   }) {
     super({ imageSrc, frameRate, scale });
     this.position = position;
-    this.velocity = {
-      x: 0,
-      y: 1,
-    };
-    this.isAttacking = isAttacking
+    this.isAttacking = isAttacking;
     this.gravity = gravity;
     this.collisionBlocks = collisionBlocks;
     this.platformCollisionBlocks = platformCollisionBlocks;
     this.ctx = ctx;
     this.canvas = canvas;
+    this.animations = playerAnimations;
+    this.lastDirection = "right";
+    this.camera = camera;
+    this.isAlive = true;
+    this.isPlayerOnGround = false;
+    this.scaledCanvas = { width: canvas.width / 3, height: canvas.height / 3 };
+    this.backgroundImageHeight = 500;
+    this.keys = {
+      d: {
+        pressed: false,
+      },
+      a: {
+        pressed: false,
+      },
+    };
+    this.movements = () => {
+      window.addEventListener("keydown", (event) => {
+        switch (event.key) {
+          case "d":
+            this.keys.d.pressed = true;
+            break;
+          case "a":
+            this.keys.a.pressed = true;
+            break;
+          case "w":
+            if (event.key === "w") {
+              this.Jump();
+            }
+            break;
+          case " ":
+            this.player.attack();
+            break;
+          default:
+        }
+      });
+      window.addEventListener("keyup", (event) => {
+        switch (event.key) {
+          case "d":
+            this.keys.d.pressed = false;
+            break;
+          case "a":
+            this.keys.a.pressed = false;
+            break;
+          default:
+        }
+      });
+    };
+    this.movements();
+    this.velocity = {
+      x: 0,
+      y: 1,
+    };
     this.hitbox = {
       position: {
         x: this.position.x,
@@ -39,18 +85,6 @@ export default class Player extends Sprite {
       width: 10,
       height: 10,
     };
-    this.animations = animations;
-    this.lastDirection = "right";
-    this.camera = camera;
-    this.health = health
-
-    for (let key in this.animations) {
-      const image = new Image();
-      image.src = this.animations[key].imageSrc;
-
-      this.animations[key].image = image;
-    }
-
     this.camerabox = {
       position: {
         x: this.position.x,
@@ -67,33 +101,17 @@ export default class Player extends Sprite {
       width: 35,
       height: 20,
     };
-    
-  }
 
+    for (let key in this.animations) {
+      const image = new Image();
+      image.src = this.animations[key].imageSrc;
 
-
-  // draw() {
-  //   this.ctx.fillStyle = "red"
-  //   this.ctx.fillRect(this.position.x, this.position.y, 50, this.height)
-
-  //   this.ctx.fillStyle = "green"
-  //   this.ctx.fillRect(
-  //     this.attackBox.position.x,
-  //     this.attackBox.position.y,
-  //     this.attackBox.width,
-  //     this.attackBox.height
-  //   )
-  // }
-
-  takeDamage(damageAmount) {
-    this.health -= damageAmount;
-    if(this.health <= 0){
-      this.health = 0
+      this.animations[key].image = image;
     }
   }
 
   switchSprite(key) {
-    if (this.image === this.animations[key].image || !this.loaded) return;
+    if (this.image === this.animations[key].image) return;
 
     this.currentFrame = 0;
     this.image = this.animations[key].image;
@@ -101,20 +119,62 @@ export default class Player extends Sprite {
     this.frameBuffer = this.animations[key].frameBuffer;
   }
 
+  checkMovement() {
+    this.velocity.x = 0;
+    if (this.keys.d.pressed) {
+      this.switchSprite("Run");
+      this.velocity.x = 2;
+      this.lastDirection = "right";
+      this.shouldPanCameraToTheLeft();
+    } else if (this.keys.a.pressed) {
+      this.switchSprite("RunLeft");
+      this.velocity.x = -2;
+      this.lastDirection = "left";
+      this.shouldPanCameraToTheRight();
+    } else if (this.velocity.y === 0) {
+      if (this.lastDirection === "right") this.switchSprite("Idle");
+      else this.switchSprite("IdleLeft");
+    }
+
+    if (this.velocity.y < 0) {
+      this.shouldPanCameraDown();
+      if (this.lastDirection === "right") this.switchSprite("Jump");
+      else this.switchSprite("JumpLeft");
+    } else if (this.velocity.y > 0) {
+      this.shouldPanCameraUp();
+      if (this.lastDirection === "right") this.switchSprite("Fall");
+      else this.switchSprite("FallLeft");
+    }
+
+    if (this.position.x > 1500) {
+      this.position.x = 0;
+      this.position.y = 400;
+      this.camera.position.x = 0;
+      this.camera.position.y = -this.backgroundImageHeight + this.scaledCanvas.height;
+    }
+
+    if (this.position.y > this.canvas.height) {
+      this.position.x = 0;
+      this.position.y = 400;
+      this.camera.position.x = 0;
+      this.camera.position.y = -this.backgroundImageHeight + this.scaledCanvas.height;
+    }
+  }
+
   updateCamerabox() {
     this.camerabox = {
       position: {
-        x: this.position.x - 50,
+        x: this.position.x - 100,
         y: this.position.y,
       },
-      width: 200,
-      height: 80,
+      width: 300,
+      height: 100,
     };
   }
 
   checkForHorizontalCanvasCollision() {
     if (
-      this.hitbox.position.x + this.hitbox.width + this.velocity.x >= 576 ||
+      this.hitbox.position.x + this.hitbox.width + this.velocity.x >= 1600 ||
       this.hitbox.position.x + this.velocity.x <= 0
     ) {
       this.velocity.x = 0;
@@ -123,9 +183,9 @@ export default class Player extends Sprite {
 
   shouldPanCameraToTheLeft() {
     const cameraboxRightSide = this.camerabox.position.x + this.camerabox.width;
-    const scaledDownCanvasWidth = this.canvas.width / 4;
+    const scaledDownCanvasWidth = this.canvas.width / 3;
 
-    if (cameraboxRightSide >= 576) return;
+    if (cameraboxRightSide >= 1600) return;
 
     if (
       cameraboxRightSide >=
@@ -150,11 +210,11 @@ export default class Player extends Sprite {
   shouldPanCameraUp() {
     if (
       this.camerabox.position.y + this.camerabox.height + this.velocity.y >=
-      432
+      575
     )
       return;
 
-    const scaledCanvasHeight = this.canvas.height / 4;
+    const scaledCanvasHeight = this.canvas.height / 3;
 
     if (
       this.camerabox.position.y + this.camerabox.height >=
@@ -167,39 +227,7 @@ export default class Player extends Sprite {
   update() {
     this.updateFrames();
     this.updateHitbox();
-
     this.updateCamerabox();
-    // this.ctx.fillStyle = "rgba(0, 0, 255, 0.2)";
-    // this.ctx.fillRect(
-    //   this.camerabox.position.x,
-    //   this.camerabox.position.y,
-    //   this.camerabox.width,
-    //   this.camerabox.height
-    // );
-
-    // this.ctx.fillStyle = "rgba(0, 255, 0, 0.2)";
-    // this.ctx.fillRect(
-    //   this.position.x,
-    //   this.position.y,
-    //   this.width,
-    //   this.height
-    // );
-    // this.ctx.fillStyle = "rgba(255, 0, 0, 0.2)";
-    // this.ctx.fillRect(
-    //   this.hitbox.position.x,
-    //   this.hitbox.position.y,
-    //   this.hitbox.width,
-    //   this.hitbox.height
-    // );
-    if (this.isAttacking) {
-    this.ctx.fillStyle = "green"
-    this.ctx.fillRect(
-      this.attackBox.position.x,
-      this.attackBox.position.y,
-      this.attackBox.width,
-      this.attackBox.height
-    )
-    }
 
     this.draw();
 
@@ -209,14 +237,9 @@ export default class Player extends Sprite {
     this.applyGravity();
     this.updateHitbox();
     this.CheckForVerticalCollisions();
-    this.updateAttackbox();
+    this.checkMovement();
   }
-  attack() {
-    this.isAttacking = true
-    setTimeout(() => {
-      this.isAttacking = false
-    }, 100)
-  }
+
   updateHitbox() {
     this.hitbox = {
       position: {
@@ -227,17 +250,6 @@ export default class Player extends Sprite {
       height: 27,
     };
   }
-  updateAttackbox() {
-    this.attackBox = {
-      position: {
-        x: this.position.x + 40,
-        y: this.position.y + 29,
-      },
-      width: 35,
-      height: 20,
-    };
-  }
-
 
   CheckForHorizontalCollisions() {
     for (let i = 0; i < this.collisionBlocks.length; i++) {
@@ -251,19 +263,15 @@ export default class Player extends Sprite {
       ) {
         if (this.velocity.x > 0) {
           this.velocity.x = 0;
-
           const offset =
             this.hitbox.position.x - this.position.x + this.hitbox.width;
-
           this.position.x = collisionBlock.position.x - offset - 0.01;
           break;
         }
 
         if (this.velocity.x < 0) {
           this.velocity.x = 0;
-
           const offset = this.hitbox.position.x - this.position.x;
-
           this.position.x =
             collisionBlock.position.x + collisionBlock.width - offset + 0.01;
           break;
@@ -280,7 +288,6 @@ export default class Player extends Sprite {
   CheckForVerticalCollisions() {
     for (let i = 0; i < this.collisionBlocks.length; i++) {
       const collisionBlock = this.collisionBlocks[i];
-
       if (
         FloorCollision({
           object1: this.hitbox,
@@ -294,9 +301,9 @@ export default class Player extends Sprite {
             this.hitbox.position.y - this.position.y + this.hitbox.height;
 
           this.position.y = collisionBlock.position.y - offset - 0.01;
+          this.isPlayerOnGround = true;
           break;
         }
-
         if (this.velocity.y < 0) {
           this.velocity.y = 0;
 
@@ -326,9 +333,17 @@ export default class Player extends Sprite {
             this.hitbox.position.y - this.position.y + this.hitbox.height;
 
           this.position.y = platformCollisionBlock.position.y - offset - 0.01;
+          this.isPlayerOnGround = true;
           break;
         }
       }
+    }
+  }
+
+  Jump() {
+    if (this.isPlayerOnGround) {
+      this.velocity.y = -4;
+      this.isPlayerOnGround = false;
     }
   }
 }
