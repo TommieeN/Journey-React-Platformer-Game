@@ -17,6 +17,7 @@ export default class Player extends Sprite {
     playerAnimations,
   }) {
     super({ imageSrc, frameRate, scale });
+    this.enemy = null
     this.position = position;
     this.gravity = gravity;
     this.collisionBlocks = collisionBlocks;
@@ -133,15 +134,6 @@ export default class Player extends Sprite {
       else this.switchSprite("FallLeft");
     }
 
-    // win condition
-    // if (this.position.x > 1500) {
-    //   this.position.x = 0;
-    //   this.position.y = 500;
-    //   this.camera.position.x = 0;
-    //   this.camera.position.y = -this.backgroundImageHeight + this.scaledCanvas.height;
-    // }
-
-
     // lose condition
     if (this.position.y > this.canvas.height) {
       this.position.x = 0;
@@ -229,6 +221,8 @@ export default class Player extends Sprite {
     this.updateHitbox();
     this.CheckForVerticalCollisions();
     this.checkMovement();
+
+    
   }
 
   updateHitbox() {

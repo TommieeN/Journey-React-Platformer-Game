@@ -8,7 +8,7 @@ import CollisionBlock from "../../Classes/CollisionBlock";
 import PlayerIdle from "../../Assets/warrior/Idle.png";
 import playerAnimations from "../../Utils/PlayerAnimations";
 import "./Canvas.scss";
-import EnemySprite from "../../Assets/Enemies/enemy_bat_3.png";
+import EnemySprite from "../../Assets/Enemies/enemy_ghost_1.png";
 import WinScreen from "../../Components/WinScreen/WinScreen";
 
 function Canvas() {
@@ -34,7 +34,7 @@ function Canvas() {
     };
 
     const enemiesArray = [];
-    const hordeEnemies = 15;
+    const hordeEnemies = 20;
 
     // CREATE AND PARSE 2D DATA FROM JSON
     const floorCollisions2D = [];
@@ -112,8 +112,8 @@ function Canvas() {
     for (let i = 0; i < hordeEnemies; i++) {
       const enemy = new Enemy({
         position: {
-          x: 100,
-          y: 400,
+          x: 0,
+          y: 0,
         },
         hitbox: {
           width: 100,
@@ -141,6 +141,26 @@ function Canvas() {
       canvasRef.current.focus();
     }
 
+    function checkCollisions(player, enemiesArray) {
+      for (let i = 0; i < enemiesArray.length; i++) {
+        const enemy = enemiesArray[i];
+        if (
+          enemy.hitbox &&
+          player.hitbox &&
+          enemy.hitbox.position.x < player.hitbox.position.x + player.hitbox.width &&
+          enemy.hitbox.position.x + enemy.hitbox.width > player.hitbox.position.x &&
+          enemy.hitbox.position.y < player.hitbox.position.y + player.hitbox.height &&
+          enemy.hitbox.height + enemy.hitbox.position.y > player.hitbox.position.y
+        ) {
+          player.position.x = 0
+          player.position.y = 370
+          camera.position.x = 0;
+          camera.position.y =
+            -backgroundImageHeight + scaledCanvas.height;
+        }
+      }
+    }
+
     // ANIMATE FUNCTION
     const animate = () => {
       requestAnimationFrame(animate);
@@ -148,8 +168,8 @@ function Canvas() {
       ctx.fillRect(camera.position.x, 0, canvas.width, canvas.height);
 
       ctx.save();
-      ctx.scale(3, 3);
-      ctx.translate(camera.position.x, camera.position.y);
+      // ctx.scale(3, 3);
+      // ctx.translate(camera.position.x, camera.position.y);
 
       background.update();
 
@@ -163,7 +183,7 @@ function Canvas() {
       }
       player.checkForHorizontalCanvasCollision();
       player.update();
-
+      checkCollisions(player, enemiesArray);
       ctx.restore();
     };
 
@@ -183,9 +203,8 @@ function Canvas() {
   return (
     <div className="game">
       <div className="game-container">
-         {playerWin && <WinScreen />}
+        {playerWin && <WinScreen />}
         <canvas ref={canvasRef} tabIndex="0" onKeyDown={handleKeyDown}></canvas>
-       
       </div>
     </div>
   );
