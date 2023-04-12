@@ -1,0 +1,16 @@
+.win-screen {
+    position: absolute;
+    color: white;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2rem;
+    &--enter {
+        animation: blinking 1s infinite
+    }
+    @keyframes blinking {
+        0% {opacity: 1;}
+        0% {opacity: 0;}
+        
+    }
+}

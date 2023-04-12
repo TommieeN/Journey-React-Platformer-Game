@@ -1,6 +1,6 @@
-import React, { useRef, useEffect } from "react";
-import BackgroundImage2 from "../../Assets/Background/newMapper.png"
-import Data2 from "../../MapData/newMapUpdated.json"
+import React, { useRef, useEffect, useState } from "react";
+import BackgroundImage2 from "../../Assets/Background/newMapper.png";
+import Data2 from "../../MapData/newMapUpdated.json";
 import Player from "../../Classes/Player";
 import Sprite from "../../Classes/Sprite";
 import Enemy from "../../Classes/Enemy";
@@ -8,15 +8,18 @@ import CollisionBlock from "../../Classes/CollisionBlock";
 import PlayerIdle from "../../Assets/warrior/Idle.png";
 import playerAnimations from "../../Utils/PlayerAnimations";
 import "./Canvas.scss";
-import EnemySprite from "../../Assets/Enemies/enemy_bat_3.png"
-// import PlayerHealth from "../../Utils/PlayerHealth";
+import EnemySprite from "../../Assets/Enemies/enemy_bat_3.png";
+import WinScreen from "../../Components/WinScreen/WinScreen";
 
 function Canvas() {
   const canvasRef = useRef(null);
+
   const floorCollisionData = Data2.layers[5].data;
   const platformCollisionData = Data2.layers[4].data;
+
   const gravity = 0.1;
-  
+
+  const [playerWin, setPlayerWin] = useState(false);
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -30,9 +33,8 @@ function Canvas() {
       height: canvas.height / 3,
     };
 
-    const enemiesArray = []
-    const hordeEnemies = 15
-
+    const enemiesArray = [];
+    const hordeEnemies = 15;
 
     // CREATE AND PARSE 2D DATA FROM JSON
     const floorCollisions2D = [];
@@ -107,24 +109,23 @@ function Canvas() {
       },
     });
 
-    for (let i = 0; i < hordeEnemies; i ++){
+    for (let i = 0; i < hordeEnemies; i++) {
       const enemy = new Enemy({
-      position: {
-        x: 100,
-        y: 400,
-      },
-      hitbox: {
-        width: 100,
-        height: 100,
-      },
-      ctx,
-      canvas,
-      imageSrc: EnemySprite,
-      frameRate: 6,
-    });
-    enemiesArray.push(enemy)
+        position: {
+          x: 100,
+          y: 400,
+        },
+        hitbox: {
+          width: 100,
+          height: 100,
+        },
+        ctx,
+        canvas,
+        imageSrc: EnemySprite,
+        frameRate: 6,
+      });
+      enemiesArray.push(enemy);
     }
-    
 
     //BACKGROUND IMAGE WITH SPRITE CLASS
     const background = new Sprite({
@@ -135,6 +136,10 @@ function Canvas() {
       imageSrc: BackgroundImage2,
       ctx: ctx,
     });
+
+    if (playerWin) {
+      canvasRef.current.focus();
+    }
 
     // ANIMATE FUNCTION
     const animate = () => {
@@ -149,39 +154,38 @@ function Canvas() {
       background.update();
 
       enemiesArray.forEach((enemy) => {
-        enemy.update()
-      })
-      
+        enemy.update();
+      });
 
+      if (player.position.x > 1503) {
+        setPlayerWin(true);
+        return;
+      }
       player.checkForHorizontalCanvasCollision();
-
       player.update();
-      
-        
+
       ctx.restore();
     };
-    
-    animate();
-    
 
-  }, []);
+    animate();
+  }, [playerWin]);
+
+  const handleKeyDown = (event) => {
+    if (event.key === "Enter") {
+      window.location.reload();
+    }
+    document.addEventListener("keydown", handleKeyDown);
+    return () => {
+      document.removeEventListener("keydown", handleKeyDown);
+    };
+  };
 
   return (
-    
-    <div className="game"><div className="touch-control-right">
-          RIGHT
-        </div>
-    {/* <PlayerHealth /> */}
+    <div className="game">
       <div className="game-container">
-        <canvas ref={canvasRef}></canvas>
-        <div className="touch-control-left">
-           LEFT 
-        </div>
-        <div className="touch-control-jump">
-          Jump
-        </div>
-        
-        {/* <div className="btn-canvas"><MusicBtn /></div> */}
+         {playerWin && <WinScreen />}
+        <canvas ref={canvasRef} tabIndex="0" onKeyDown={handleKeyDown}></canvas>
+       
       </div>
     </div>
   );

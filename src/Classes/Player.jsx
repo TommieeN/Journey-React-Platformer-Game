@@ -31,24 +31,24 @@ export default class Player extends Sprite {
     this.scaledCanvas = { width: canvas.width / 3, height: canvas.height / 3 };
     this.backgroundImageHeight = 500;
     this.keys = {
-      d: {
+      arrowright: {
         pressed: false,
       },
-      a: {
+      arrowleft: {
         pressed: false,
       },
     };
     this.movements = () => {
       window.addEventListener("keydown", (event) => {
         switch (event.key) {
-          case "d":
-            this.keys.d.pressed = true;
+          case "ArrowRight":
+            this.keys.arrowright.pressed = true;
             break;
-          case "a":
-            this.keys.a.pressed = true;
+          case "ArrowLeft":
+            this.keys.arrowleft.pressed = true;
             break;
-          case "w":
-            if (event.key === "w") {
+          case "ArrowUp":
+            if (event.key === "ArrowUp") {
               this.Jump();
             }
             break;
@@ -57,11 +57,11 @@ export default class Player extends Sprite {
       });
       window.addEventListener("keyup", (event) => {
         switch (event.key) {
-          case "d":
-            this.keys.d.pressed = false;
+          case "ArrowRight":
+            this.keys.arrowright.pressed = false;
             break;
-          case "a":
-            this.keys.a.pressed = false;
+          case "ArrowLeft":
+            this.keys.arrowleft.pressed = false;
             break;
           default:
         }
@@ -105,20 +105,15 @@ export default class Player extends Sprite {
     this.frameRate = this.animations[key].frameRate;
     this.frameBuffer = this.animations[key].frameBuffer;
   }
-  // checkTouchMovement() {
-  //   this.velocity.x = 0;
-  //   this.switchSprite("Run");
-  //   this.velocity.x = 2;
-  //   this.lastDirection = "right";
-  // }
+
   checkMovement() {
     this.velocity.x = 0;
-    if (this.keys.d.pressed) {
+    if (this.keys.arrowright.pressed) {
       this.switchSprite("Run");
       this.velocity.x = 2;
       this.lastDirection = "right";
       this.shouldPanCameraToTheLeft();
-    } else if (this.keys.a.pressed) {
+    } else if (this.keys.arrowleft.pressed) {
       this.switchSprite("RunLeft");
       this.velocity.x = -2;
       this.lastDirection = "left";
@@ -138,14 +133,16 @@ export default class Player extends Sprite {
       else this.switchSprite("FallLeft");
     }
 
-    if (this.position.x > 1500) {
-      this.position.x = 0;
-      this.position.y = 500;
-      this.camera.position.x = 0;
-      this.camera.position.y =
-        -this.backgroundImageHeight + this.scaledCanvas.height;
-    }
+    // win condition
+    // if (this.position.x > 1500) {
+    //   this.position.x = 0;
+    //   this.position.y = 500;
+    //   this.camera.position.x = 0;
+    //   this.camera.position.y = -this.backgroundImageHeight + this.scaledCanvas.height;
+    // }
 
+
+    // lose condition
     if (this.position.y > this.canvas.height) {
       this.position.x = 0;
       this.position.y = 400;
@@ -231,10 +228,7 @@ export default class Player extends Sprite {
     this.applyGravity();
     this.updateHitbox();
     this.CheckForVerticalCollisions();
-    // this.checkMovement();
-
-
-
+    this.checkMovement();
   }
 
   updateHitbox() {
