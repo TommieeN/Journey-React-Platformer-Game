@@ -35,7 +35,7 @@ function Canvas() {
     };
 
     const enemiesArray = [];
-    const hordeEnemies = 10;
+    const hordeEnemies = 12;
 
     //PARSE 2D DATA FROM JSON FOR FLOOR BLOCKS
     const floorCollisions2D = [];

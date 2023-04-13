@@ -31,10 +31,10 @@ export default class Enemy extends Sprite {
     // ENEMY MOVEMENT
     this.x = Math.random() * (canvas.width - this.width);
     this.y = Math.random() * (canvas.height - this.height);
-    this.speed = Math.random() * 4 - 2;
-    this.angle = Math.random() * 550;
+    this.speed = Math.random() * 5 - 2;
+    this.angle = Math.random() * 400;
     this.angleSpeed = Math.random() * 0.01 - 0.5;
-    this.curve = Math.random() * 200 + 150;
+    this.curve = Math.random() * 200 + 100;
   }
 
   update() {
@@ -43,14 +43,15 @@ export default class Enemy extends Sprite {
     this.updateHitbox();
 
     this.position.x =
-      this.curve * Math.sin((this.angle * Math.PI) / 150) +
-      (this.canvas.width - this.width );
+      this.curve * Math.sin((this.angle * Math.PI) / 325) +
+      (this.canvas.width - this.width / 2);
     this.position.y =
-      this.curve * Math.cos((this.angle * Math.PI) / 350) +
-      (this.canvas.height / 2 - this.height / 2);
+      this.curve * Math.cos((this.angle * Math.PI) / 325) +
+      (this.canvas.height /2 - this.height / 2);
 
     this.angle -= this.angleSpeed;
 
+    if (this.x + this.width < 0) this.x = this.canvas.width;
   }
 
   updateHitbox() {

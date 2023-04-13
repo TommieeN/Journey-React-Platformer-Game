@@ -167,8 +167,8 @@ export default class Player extends Sprite {
         x: this.position.x - 100,
         y: this.position.y,
       },
-      width: 300,
-      height: 100,
+      width: 350,
+      height: 110,
     };
   }
   shouldPanCameraToTheLeft() {
