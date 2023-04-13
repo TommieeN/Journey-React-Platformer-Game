@@ -20,14 +20,20 @@ Check out my other projects on GitHub
 
 https://www.youtube.com/@ChrisCourses 
 Amazing youtube tutorials on canvas. Most of my inspiration came from this channel check him out!
+
 https://www.youtube.com/c/Frankslaboratory
 Another amazing youtube channel filled with information on creating games with javascript
 
 Artists and Musicians for my music, sprite sheets and tilesets.
+
 https://itch.io/profile/trixelized spring starfields
+
 https://www.peakpx.com/en/hd-wallpaper-desktop-efpfq
+
 https://xdeviruchi.itch.io/8-bit-fantasy-adventure-music-pack
+
 https://szadiart.itch.io/crystal-world-platformer-set
+
 https://luizmelo.itch.io/medieval-king-pack-2
 
 Thanks for playing, and any feedback is greatly appreciated!
