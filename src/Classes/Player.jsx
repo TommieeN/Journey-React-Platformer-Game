@@ -346,5 +346,6 @@ checkForHorizontalCanvasCollision() {
     this.updateHitbox();
     this.CheckForVerticalCollisions();
     this.checkMovement();
+    this.checkForHorizontalCanvasCollision()
   }
 }

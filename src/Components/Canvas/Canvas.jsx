@@ -177,12 +177,12 @@ function Canvas() {
     // ANIMATE FUNCTION
     const animate = () => {
       requestAnimationFrame(animate);
+
       ctx.fillStyle = "black";
       ctx.fillRect(camera.position.x, 0, canvas.width, canvas.height);
-
       ctx.save();
-      ctx.scale(3, 3);
-      ctx.translate(camera.position.x, camera.position.y);
+      // ctx.scale(3, 3);
+      // ctx.translate(camera.position.x, camera.position.y);
 
       background.update();
 
@@ -191,15 +191,15 @@ function Canvas() {
         enemy.update();
       });
 
-      player.checkForHorizontalCanvasCollision();
       player.update();
-
       if (player.position.x > 1500) {
         setPlayerWin(true);
       }
 
       ctx.restore();
+
     };
+
     animate();
 
     document.addEventListener("keydown", handleKeyDown);
