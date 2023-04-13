@@ -17,12 +17,17 @@ Connect with me on LinkedIn
 Check out my other projects on GitHub
 
 # Credits #
-Chris Courses for amazing YouTube tutorials on canvas
-Frank's Laboratory for information on creating games with JavaScript
-Artists and Musicians for their work:
-Trixelized for the Spring Starfields tileset
-Peakpx for the desktop wallpaper
-Xdeviruchi for the 8-Bit Fantasy Adventure Music Pack
-Szadiart for the Crystal World Platformer Set
-Luizmelo for the Medieval King Pack 2 tileset
+
+https://www.youtube.com/@ChrisCourses 
+Amazing youtube tutorials on canvas. Most of my inspiration came from this channel check him out!
+https://www.youtube.com/c/Frankslaboratory
+Another amazing youtube channel filled with information on creating games with javascript
+
+Artists and Musicians for my music, sprite sheets and tilesets.
+https://itch.io/profile/trixelized spring starfields
+https://www.peakpx.com/en/hd-wallpaper-desktop-efpfq
+https://xdeviruchi.itch.io/8-bit-fantasy-adventure-music-pack
+https://szadiart.itch.io/crystal-world-platformer-set
+https://luizmelo.itch.io/medieval-king-pack-2
+
 Thanks for playing, and any feedback is greatly appreciated!
