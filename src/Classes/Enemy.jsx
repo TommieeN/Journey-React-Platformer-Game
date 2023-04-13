@@ -43,7 +43,7 @@ export default class Enemy extends Sprite {
 
     this.position.x =
       this.curve * Math.sin((this.angle * Math.PI) / 325) +
-      (this.canvas.width - this.width / 2);
+      (this.canvas.width / 2 - this.width / 2);
     this.position.y =
       this.curve * Math.cos((this.angle * Math.PI) / 325) +
       (this.canvas.height / 2 - this.height / 2);
