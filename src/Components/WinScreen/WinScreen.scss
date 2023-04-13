@@ -4,7 +4,10 @@
     display: flex;
     flex-direction: column;
     align-items: center;
+    background-color: black;
+    border: 2px solid white;
     gap: 2rem;
+    padding: 2rem;
     &--enter {
         animation: blinking 1s infinite
     }

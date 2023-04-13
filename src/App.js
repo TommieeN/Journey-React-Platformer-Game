@@ -11,10 +11,10 @@ const App = () => {
   };
 
   return (
-    <div>
-      {/* {gameStarted === false && <TitleScreen onStartGame={handleStartGame} />}
-      {gameStarted === true && <Canvas />}    */}
-      <Canvas /> 
+    <div autoFocus>
+      {gameStarted === false && <TitleScreen onStartGame={handleStartGame} />}
+      {gameStarted === true && <Canvas />}   
+      {/* <Canvas />  */}
     </div>
   );
 };

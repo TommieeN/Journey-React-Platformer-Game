@@ -12,6 +12,9 @@ canvas {
     height: 100vh;
     background-image: url(../../Assets/Title/peakpx.jpg);
     background-size: cover ;
+    &__win {
+        background-color: black;
+    }
 }
 
 .btn-canvas {

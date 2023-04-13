@@ -17,7 +17,7 @@ export default class Player extends Sprite {
     playerAnimations,
   }) {
     super({ imageSrc, frameRate, scale });
-    this.enemy = null
+    this.enemy = null;
     this.position = position;
     this.gravity = gravity;
     this.collisionBlocks = collisionBlocks;
@@ -31,6 +31,8 @@ export default class Player extends Sprite {
     this.isPlayerOnGround = false;
     this.scaledCanvas = { width: canvas.width / 3, height: canvas.height / 3 };
     this.backgroundImageHeight = 500;
+
+    // PLAYER CONTROLS
     this.keys = {
       arrowright: {
         pressed: false,
@@ -90,6 +92,8 @@ export default class Player extends Sprite {
       height: 80,
     };
 
+
+    // CREATE NEW IMAGE FOR ANIMATIONS
     for (let key in this.animations) {
       const image = new Image();
       image.src = this.animations[key].imageSrc;
@@ -98,6 +102,8 @@ export default class Player extends Sprite {
     }
   }
 
+
+  // SWITCH SPRITE FUNCTION
   switchSprite(key) {
     if (this.image === this.animations[key].image) return;
 
@@ -107,18 +113,23 @@ export default class Player extends Sprite {
     this.frameBuffer = this.animations[key].frameBuffer;
   }
 
+
+// PLAYER MOVE SPEED/ANIMATIONS
   checkMovement() {
     this.velocity.x = 0;
+
     if (this.keys.arrowright.pressed) {
       this.switchSprite("Run");
       this.velocity.x = 2;
       this.lastDirection = "right";
       this.shouldPanCameraToTheLeft();
+
     } else if (this.keys.arrowleft.pressed) {
       this.switchSprite("RunLeft");
       this.velocity.x = -2;
       this.lastDirection = "left";
       this.shouldPanCameraToTheRight();
+
     } else if (this.velocity.y === 0) {
       if (this.lastDirection === "right") this.switchSprite("Idle");
       else this.switchSprite("IdleLeft");
@@ -134,7 +145,7 @@ export default class Player extends Sprite {
       else this.switchSprite("FallLeft");
     }
 
-    // lose condition
+    // LOSE CONDITION
     if (this.position.y > this.canvas.height) {
       this.position.x = 0;
       this.position.y = 400;
@@ -144,6 +155,7 @@ export default class Player extends Sprite {
     }
   }
 
+// CAMERA PANNING
   updateCamerabox() {
     this.camerabox = {
       position: {
@@ -154,16 +166,6 @@ export default class Player extends Sprite {
       height: 100,
     };
   }
-
-  checkForHorizontalCanvasCollision() {
-    if (
-      this.hitbox.position.x + this.hitbox.width + this.velocity.x >= 1600 ||
-      this.hitbox.position.x + this.velocity.x <= 0
-    ) {
-      this.velocity.x = 0;
-    }
-  }
-
   shouldPanCameraToTheLeft() {
     const cameraboxRightSide = this.camerabox.position.x + this.camerabox.width;
     const scaledDownCanvasWidth = this.canvas.width / 3;
@@ -207,24 +209,7 @@ export default class Player extends Sprite {
     }
   }
 
-  update() {
-    this.updateFrames();
-    this.updateHitbox();
-    this.updateCamerabox();
-
-    this.draw();
-
-    this.position.x += this.velocity.x;
-    this.updateHitbox();
-    this.CheckForHorizontalCollisions();
-    this.applyGravity();
-    this.updateHitbox();
-    this.CheckForVerticalCollisions();
-    this.checkMovement();
-
-    
-  }
-
+  // HITBOX FOR PLAYER
   updateHitbox() {
     this.hitbox = {
       position: {
@@ -236,6 +221,17 @@ export default class Player extends Sprite {
     };
   }
 
+// CHECK FOR CANVAS COLLISION FOR PLAYER
+checkForHorizontalCanvasCollision() {
+    if (
+      this.hitbox.position.x + this.hitbox.width + this.velocity.x >= 1600 ||
+      this.hitbox.position.x + this.velocity.x <= 0
+    ) {
+      this.velocity.x = 0;
+    }
+  }
+
+  // CHECK FOR HORIZONTAL COLLISIONS FOR PLAYER
   CheckForHorizontalCollisions() {
     for (let i = 0; i < this.collisionBlocks.length; i++) {
       const collisionBlock = this.collisionBlocks[i];
@@ -265,11 +261,13 @@ export default class Player extends Sprite {
     }
   }
 
+  // GRAVITY
   applyGravity() {
     this.velocity.y += this.gravity;
     this.position.y += this.velocity.y;
   }
 
+  // CHECK FOR VERTICAL COLLISIONS FOR PLAYER
   CheckForVerticalCollisions() {
     for (let i = 0; i < this.collisionBlocks.length; i++) {
       const collisionBlock = this.collisionBlocks[i];
@@ -325,10 +323,28 @@ export default class Player extends Sprite {
     }
   }
 
+  // CHECK FOR JUMP
   Jump() {
     if (this.isPlayerOnGround) {
       this.velocity.y = -4;
       this.isPlayerOnGround = false;
     }
+  }
+
+
+  update() {
+    this.updateFrames();
+    this.updateHitbox();
+    this.updateCamerabox();
+
+    this.draw();
+
+    this.position.x += this.velocity.x;
+    this.updateHitbox();
+    this.CheckForHorizontalCollisions();
+    this.applyGravity();
+    this.updateHitbox();
+    this.CheckForVerticalCollisions();
+    this.checkMovement();
   }
 }

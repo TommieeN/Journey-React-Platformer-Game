@@ -18,7 +18,8 @@ export default class Sprite {
 
   draw() {
     if (!this.image) return;
-
+    
+// CROPPING SPRITE SHEET
     const cropBox = {
       position: {
         x: this.currentFrame * (this.image.width / this.frameRate),
@@ -27,7 +28,6 @@ export default class Sprite {
       width: this.image.width / this.frameRate,
       height: this.image.height,
     };
-    // CROPPING SPRITE SHEET
     this.ctx.drawImage(
       this.image,
       cropBox.position.x,

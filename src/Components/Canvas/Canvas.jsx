@@ -34,15 +34,16 @@ function Canvas() {
     };
 
     const enemiesArray = [];
-    const hordeEnemies = 20;
+    const hordeEnemies = 10;
 
-    // CREATE AND PARSE 2D DATA FROM JSON
+    //PARSE 2D DATA FROM JSON FOR FLOOR BLOCKS
     const floorCollisions2D = [];
     for (let i = 0; i < floorCollisionData.length; i += 100) {
       const floorCollision = floorCollisionData.slice(i, i + 100);
       floorCollisions2D.push(floorCollision);
     }
 
+    // CREATE NEW FLOOR BLOCKS
     const collisionBlocks = [];
     floorCollisions2D.forEach((row, y) => {
       row.forEach((symbol, x) => {
@@ -59,11 +60,14 @@ function Canvas() {
       });
     });
 
+    //PARSE 2D DATA FROM JSON FOR PLATFORM BLOCKS
     const platformCollisions2D = [];
     for (let i = 0; i < platformCollisionData.length; i += 100) {
       const platformCollision = platformCollisionData.slice(i, i + 100);
       platformCollisions2D.push(platformCollision);
     }
+
+    // CREATE NEW PLATFORM BLOCKS
     const platformCollisionBlocks = [];
     platformCollisions2D.forEach((row, y) => {
       row.forEach((symbol, x) => {
@@ -80,8 +84,10 @@ function Canvas() {
         }
       });
     });
-    const backgroundImageHeight = 500;
 
+    const backgroundImageHeight = 470;
+
+    // CAMERA POSITION
     const camera = {
       position: {
         x: 0,
@@ -89,6 +95,7 @@ function Canvas() {
       },
     };
 
+    // CREATE PLAYER
     const player = new Player({
       position: {
         x: 0,
@@ -109,6 +116,7 @@ function Canvas() {
       },
     });
 
+    // CREATE MULTIPLE ENEMIES
     for (let i = 0; i < hordeEnemies; i++) {
       const enemy = new Enemy({
         position: {
@@ -137,26 +145,31 @@ function Canvas() {
       ctx: ctx,
     });
 
-    if (playerWin) {
-      canvasRef.current.focus();
+    // RESET FUNCTION
+    function restart() {
+      player.position.x = 0;
+      player.position.y = 370;
+      camera.position.x = 0;
+      camera.position.y = -backgroundImageHeight + scaledCanvas.height;
     }
 
+    // CHECK FOR COLLISIONS BETWEEN ENEMIES AND PLAYER
     function checkCollisions(player, enemiesArray) {
       for (let i = 0; i < enemiesArray.length; i++) {
         const enemy = enemiesArray[i];
         if (
           enemy.hitbox &&
           player.hitbox &&
-          enemy.hitbox.position.x < player.hitbox.position.x + player.hitbox.width &&
-          enemy.hitbox.position.x + enemy.hitbox.width > player.hitbox.position.x &&
-          enemy.hitbox.position.y < player.hitbox.position.y + player.hitbox.height &&
-          enemy.hitbox.height + enemy.hitbox.position.y > player.hitbox.position.y
+          enemy.hitbox.position.x <
+            player.hitbox.position.x + player.hitbox.width &&
+          enemy.hitbox.position.x + enemy.hitbox.width >
+            player.hitbox.position.x &&
+          enemy.hitbox.position.y <
+            player.hitbox.position.y + player.hitbox.height &&
+          enemy.hitbox.height + enemy.hitbox.position.y >
+            player.hitbox.position.y
         ) {
-          player.position.x = 0
-          player.position.y = 370
-          camera.position.x = 0;
-          camera.position.y =
-            -backgroundImageHeight + scaledCanvas.height;
+          restart();
         }
       }
     }
@@ -168,43 +181,41 @@ function Canvas() {
       ctx.fillRect(camera.position.x, 0, canvas.width, canvas.height);
 
       ctx.save();
-      // ctx.scale(3, 3);
-      // ctx.translate(camera.position.x, camera.position.y);
+      ctx.scale(3, 3);
+      ctx.translate(camera.position.x, camera.position.y);
 
       background.update();
 
+      checkCollisions(player, enemiesArray);
       enemiesArray.forEach((enemy) => {
         enemy.update();
       });
 
-      if (player.position.x > 1503) {
-        setPlayerWin(true);
-        return;
-      }
       player.checkForHorizontalCanvasCollision();
       player.update();
-      checkCollisions(player, enemiesArray);
+
+      if (player.position.x > 1500) {
+        setPlayerWin(true);
+      }
+
       ctx.restore();
     };
-
     animate();
-  }, [playerWin]);
+
+    document.addEventListener("keydown", handleKeyDown);
+  }, []);
 
   const handleKeyDown = (event) => {
-    if (event.key === "Enter") {
-      window.location.reload();
+    if (event.key === " ") {
+      document.location.reload();
     }
-    document.addEventListener("keydown", handleKeyDown);
-    return () => {
-      document.removeEventListener("keydown", handleKeyDown);
-    };
   };
 
   return (
     <div className="game">
       <div className="game-container">
-        {playerWin && <WinScreen />}
-        <canvas ref={canvasRef} tabIndex="0" onKeyDown={handleKeyDown}></canvas>
+        <canvas ref={canvasRef} tabIndex="0"></canvas>
+        {playerWin ? <WinScreen /> : ""}
       </div>
     </div>
   );
