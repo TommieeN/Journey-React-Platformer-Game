@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import TitleTheme from '../../Assets/Music/Title-Theme.wav';
+import TitleTheme from '../../Assets/Music/Decisive-Battle.wav';
 import "./MusicBtn.scss";
 
 const MusicBtn = () => {

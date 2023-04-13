@@ -1,5 +1,6 @@
 import FloorCollision from "../Utils/FloorCollision";
 import PlatformCollision from "../Utils/PlatformCollision";
+import playerAnimations from "../Utils/PlayerAnimations";
 import Sprite from "./Sprite";
 
 export default class Player extends Sprite {
@@ -43,6 +44,9 @@ export default class Player extends Sprite {
     };
     this.movements = () => {
       window.addEventListener("keydown", (event) => {
+        if(this.position.x > 1502) {
+          return
+        }
         switch (event.key) {
           case "ArrowRight":
             this.keys.arrowright.pressed = true;
@@ -145,6 +149,7 @@ export default class Player extends Sprite {
       else this.switchSprite("FallLeft");
     }
 
+
     // LOSE CONDITION
     if (this.position.y > this.canvas.height) {
       this.position.x = 0;
@@ -168,7 +173,7 @@ export default class Player extends Sprite {
   }
   shouldPanCameraToTheLeft() {
     const cameraboxRightSide = this.camerabox.position.x + this.camerabox.width;
-    const scaledDownCanvasWidth = this.canvas.width / 3;
+    const scaledDownCanvasWidth = this.canvas.width / 2.5;
 
     if (cameraboxRightSide >= 1600) return;
 
@@ -188,27 +193,27 @@ export default class Player extends Sprite {
   shouldPanCameraDown() {
     if (this.camerabox.position.y + this.velocity.y <= 0) return;
 
-    if (this.camerabox.position.y <= Math.abs(this.camera.position.y)) {
+    if (this.camerabox.position.y <= Math.abs(this.camera.position.y - 50)) {
       this.camera.position.y -= this.velocity.y;
     }
   }
   shouldPanCameraUp() {
     if (
       this.camerabox.position.y + this.camerabox.height + this.velocity.y >=
-      575
+      520
     )
       return;
 
-    const scaledCanvasHeight = this.canvas.height / 3;
+    const scaledCanvasHeight = this.canvas.height / 2.5;
 
     if (
       this.camerabox.position.y + this.camerabox.height >=
-      Math.abs(this.camera.position.y) + scaledCanvasHeight
+      Math.abs(this.camera.position.y + 50 ) + scaledCanvasHeight
     ) {
       this.camera.position.y -= this.velocity.y;
     }
   }
-
+  
   // HITBOX FOR PLAYER
   updateHitbox() {
     this.hitbox = {

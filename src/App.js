@@ -14,7 +14,6 @@ const App = () => {
     <div autoFocus>
       {gameStarted === false && <TitleScreen onStartGame={handleStartGame} />}
       {gameStarted === true && <Canvas />}   
-      {/* <Canvas />  */}
     </div>
   );
 };

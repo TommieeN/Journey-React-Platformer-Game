@@ -7,7 +7,9 @@ import PlayerJumpLeft from "../Assets/warrior/JumpLeft.png";
 import PlayerFall from "../Assets/warrior/Fall.png";
 import PlayerFallLeft from "../Assets/warrior/FallLeft.png";
 import PlayerDeath from "../Assets/warrior/Death.png";
+import PlayerAttack from "../Assets/warrior/Attack3.png"
 
+// ANIMATIONS FOR PLAYER
 const playerAnimations = {
     Idle: {
       imageSrc: PlayerIdle,
@@ -48,6 +50,11 @@ const playerAnimations = {
       imageSrc: PlayerFallLeft,
       frameRate: 2,
       frameBuffer: 5,
+    },
+    Attack: {
+      imageSrc: PlayerAttack,
+      frameRate: 4,
+      frameBuffer: 4,
     },
     Death: {
       imageSrc: PlayerDeath,

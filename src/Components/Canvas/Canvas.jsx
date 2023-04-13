@@ -10,6 +10,7 @@ import playerAnimations from "../../Utils/PlayerAnimations";
 import "./Canvas.scss";
 import EnemySprite from "../../Assets/Enemies/enemy_ghost_1.png";
 import WinScreen from "../../Components/WinScreen/WinScreen";
+import CollideCollision from "../../Utils/CollideCollision";
 
 function Canvas() {
   const canvasRef = useRef(null);
@@ -29,8 +30,8 @@ function Canvas() {
     canvas.height = 576;
 
     const scaledCanvas = {
-      width: canvas.width / 3,
-      height: canvas.height / 3,
+      width: canvas.width / 2.5,
+      height: canvas.height / 2.5,
     };
 
     const enemiesArray = [];
@@ -85,7 +86,7 @@ function Canvas() {
       });
     });
 
-    const backgroundImageHeight = 470;
+    const backgroundImageHeight = 490;
 
     // CAMERA POSITION
     const camera = {
@@ -157,18 +158,7 @@ function Canvas() {
     function checkCollisions(player, enemiesArray) {
       for (let i = 0; i < enemiesArray.length; i++) {
         const enemy = enemiesArray[i];
-        if (
-          enemy.hitbox &&
-          player.hitbox &&
-          enemy.hitbox.position.x <
-            player.hitbox.position.x + player.hitbox.width &&
-          enemy.hitbox.position.x + enemy.hitbox.width >
-            player.hitbox.position.x &&
-          enemy.hitbox.position.y <
-            player.hitbox.position.y + player.hitbox.height &&
-          enemy.hitbox.height + enemy.hitbox.position.y >
-            player.hitbox.position.y
-        ) {
+        if (CollideCollision(player, enemy)) {
           restart();
         }
       }
@@ -178,11 +168,15 @@ function Canvas() {
     const animate = () => {
       requestAnimationFrame(animate);
 
+      if (player.position.x > 1502) {
+        setPlayerWin(true);
+      }
+
       ctx.fillStyle = "black";
       ctx.fillRect(camera.position.x, 0, canvas.width, canvas.height);
       ctx.save();
-      // ctx.scale(3, 3);
-      // ctx.translate(camera.position.x, camera.position.y);
+      ctx.scale(2.5, 2.5);
+      ctx.translate(camera.position.x, camera.position.y);
 
       background.update();
 
@@ -192,12 +186,8 @@ function Canvas() {
       });
 
       player.update();
-      if (player.position.x > 1500) {
-        setPlayerWin(true);
-      }
 
       ctx.restore();
-
     };
 
     animate();
