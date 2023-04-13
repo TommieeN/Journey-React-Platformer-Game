@@ -2,24 +2,24 @@ export default class Sprite {
   constructor({ position, imageSrc, frameRate = 1, scale = 1, ctx }) {
     this.ctx = ctx;
     this.position = position;
-    this.scale = scale
+    this.scale = scale;
     this.image = new Image();
     this.image.onload = () => {
       this.width = (this.image.width / this.frameRate) * this.scale;
       this.height = this.image.height * this.scale;
-      this.loaded = true
+      this.loaded = true;
     };
     this.image.src = imageSrc;
-    this.frameRate = frameRate
-    this.currentFrame = 0
-    this.frameBuffer = 3
-    this.elapsedFrames = 0
+    this.frameRate = frameRate;
+    this.currentFrame = 0;
+    this.frameBuffer = 3;
+    this.elapsedFrames = 0;
   }
 
   draw() {
     if (!this.image) return;
-    
-// CROPPING SPRITE SHEET
+
+    // CROPPING SPRITE SHEET
     const cropBox = {
       position: {
         x: this.currentFrame * (this.image.width / this.frameRate),
@@ -37,20 +37,19 @@ export default class Sprite {
       this.position.x,
       this.position.y,
       this.width,
-      this.height,
+      this.height
     );
   }
 
   update() {
     this.draw();
-    this.updateFrames()
+    this.updateFrames();
   }
 
   updateFrames() {
-    this.elapsedFrames++
+    this.elapsedFrames++;
     if (this.elapsedFrames % this.frameBuffer === 0)
-
-    if(this.currentFrame < this.frameRate - 1) this.currentFrame++
-    else this.currentFrame = 0
+      if (this.currentFrame < this.frameRate - 1) this.currentFrame++;
+      else this.currentFrame = 0;
   }
 }

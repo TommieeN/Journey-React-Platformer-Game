@@ -1,12 +1,12 @@
-import React, { useState } from 'react';
-import TitleTheme from '../../Assets/Music/Decisive-Battle.wav';
+import React, { useState } from "react";
+import TitleTheme from "../../Assets/Music/Decisive-Battle.wav";
 import "./MusicBtn.scss";
 
 const MusicBtn = () => {
-    const [audio] = useState(new Audio(TitleTheme));
-    const [audioOn, setAudioOn] = useState(false)
+  const [audio] = useState(new Audio(TitleTheme));
+  const [audioOn, setAudioOn] = useState(false);
 
- const handleButtonClick = () => {
+  const handleButtonClick = () => {
     if (audioOn) {
       audio.pause();
       setAudioOn(false);
@@ -16,10 +16,10 @@ const MusicBtn = () => {
     }
   };
 
-audio.loop = true
+  audio.loop = true;
 
   return (
-    <button className='btn' onClick={handleButtonClick}>
+    <button className="btn" onClick={handleButtonClick}>
       {audioOn ? "Music On" : "Music Off"}
     </button>
   );

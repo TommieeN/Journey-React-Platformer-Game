@@ -1,16 +1,16 @@
 import React, { useRef, useEffect, useState } from "react";
-import BackgroundImage2 from "../../Assets/Background/newMapper.png";
-import Data2 from "../../MapData/newMapUpdated.json";
+import WinScreen from "../../Components/WinScreen/WinScreen";
 import Player from "../../Classes/Player";
 import Sprite from "../../Classes/Sprite";
 import Enemy from "../../Classes/Enemy";
 import CollisionBlock from "../../Classes/CollisionBlock";
 import PlayerIdle from "../../Assets/warrior/Idle.png";
-import playerAnimations from "../../Utils/PlayerAnimations";
-import "./Canvas.scss";
 import EnemySprite from "../../Assets/Enemies/enemy_ghost_1.png";
-import WinScreen from "../../Components/WinScreen/WinScreen";
+import BackgroundImage2 from "../../Assets/Background/newMapper.png";
+import playerAnimations from "../../Utils/PlayerAnimations";
 import CollideCollision from "../../Utils/CollideCollision";
+import Data2 from "../../MapData/newMapUpdated.json";
+import "./Canvas.scss";
 
 function Canvas() {
   const canvasRef = useRef(null);

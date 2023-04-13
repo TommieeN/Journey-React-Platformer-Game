@@ -1,6 +1,6 @@
 import React, { useState } from "react";
+import "./App.scss";
 import Canvas from "./Components/Canvas/Canvas";
-import "./App.scss"
 import TitleScreen from "./Components/TitleScreen/TitleScreen/TitleScreen";
 
 const App = () => {
@@ -11,9 +11,9 @@ const App = () => {
   };
 
   return (
-    <div autoFocus>
+    <div>
       {gameStarted === false && <TitleScreen onStartGame={handleStartGame} />}
-      {gameStarted === true && <Canvas />}   
+      {gameStarted === true && <Canvas />}
     </div>
   );
 };

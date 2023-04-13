@@ -1,22 +1,23 @@
 .win-screen {
-    position: absolute;
-    color: white;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    background-color: rgb(0, 0, 0);
-    border: 2px solid white;
-    gap: 2rem;
-    padding: 2rem;
-    
-    &--enter {
-        animation: blinking 1s infinite
-    }
-    @keyframes blinking {
-        0% {opacity: 1;}
-        0% {opacity: 0;}
-        
-    }
-    
-}
+  position: absolute;
+  color: white;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: rgb(0, 0, 0);
+  border: 2px solid white;
+  gap: 2rem;
+  padding: 2rem;
 
+  &--enter {
+    animation: blinking 1s infinite;
+  }
+  @keyframes blinking {
+    0% {
+      opacity: 1;
+    }
+    0% {
+      opacity: 0;
+    }
+  }
+}

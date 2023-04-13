@@ -27,7 +27,6 @@ export default class Enemy extends Sprite {
     this.width = width;
     this.height = height;
 
-
     // ENEMY MOVEMENT
     this.x = Math.random() * (canvas.width - this.width);
     this.y = Math.random() * (canvas.height - this.height);
@@ -47,7 +46,7 @@ export default class Enemy extends Sprite {
       (this.canvas.width - this.width / 2);
     this.position.y =
       this.curve * Math.cos((this.angle * Math.PI) / 325) +
-      (this.canvas.height /2 - this.height / 2);
+      (this.canvas.height / 2 - this.height / 2);
 
     this.angle -= this.angleSpeed;
 

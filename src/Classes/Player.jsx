@@ -1,6 +1,5 @@
 import FloorCollision from "../Utils/FloorCollision";
 import PlatformCollision from "../Utils/PlatformCollision";
-import playerAnimations from "../Utils/PlayerAnimations";
 import Sprite from "./Sprite";
 
 export default class Player extends Sprite {
@@ -44,8 +43,8 @@ export default class Player extends Sprite {
     };
     this.movements = () => {
       window.addEventListener("keydown", (event) => {
-        if(this.position.x > 1502) {
-          return
+        if (this.position.x > 1502) {
+          return;
         }
         switch (event.key) {
           case "ArrowRight":
@@ -96,7 +95,6 @@ export default class Player extends Sprite {
       height: 80,
     };
 
-
     // CREATE NEW IMAGE FOR ANIMATIONS
     for (let key in this.animations) {
       const image = new Image();
@@ -105,7 +103,6 @@ export default class Player extends Sprite {
       this.animations[key].image = image;
     }
   }
-
 
   // SWITCH SPRITE FUNCTION
   switchSprite(key) {
@@ -117,8 +114,7 @@ export default class Player extends Sprite {
     this.frameBuffer = this.animations[key].frameBuffer;
   }
 
-
-// PLAYER MOVE SPEED/ANIMATIONS
+  // PLAYER MOVE SPEED/ANIMATIONS
   checkMovement() {
     this.velocity.x = 0;
 
@@ -127,13 +123,11 @@ export default class Player extends Sprite {
       this.velocity.x = 2;
       this.lastDirection = "right";
       this.shouldPanCameraToTheLeft();
-
     } else if (this.keys.arrowleft.pressed) {
       this.switchSprite("RunLeft");
       this.velocity.x = -2;
       this.lastDirection = "left";
       this.shouldPanCameraToTheRight();
-
     } else if (this.velocity.y === 0) {
       if (this.lastDirection === "right") this.switchSprite("Idle");
       else this.switchSprite("IdleLeft");
@@ -149,7 +143,6 @@ export default class Player extends Sprite {
       else this.switchSprite("FallLeft");
     }
 
-
     // LOSE CONDITION
     if (this.position.y > this.canvas.height) {
       this.position.x = 0;
@@ -160,7 +153,7 @@ export default class Player extends Sprite {
     }
   }
 
-// CAMERA PANNING
+  // CAMERA PANNING
   updateCamerabox() {
     this.camerabox = {
       position: {
@@ -208,12 +201,12 @@ export default class Player extends Sprite {
 
     if (
       this.camerabox.position.y + this.camerabox.height >=
-      Math.abs(this.camera.position.y + 50 ) + scaledCanvasHeight
+      Math.abs(this.camera.position.y + 50) + scaledCanvasHeight
     ) {
       this.camera.position.y -= this.velocity.y;
     }
   }
-  
+
   // HITBOX FOR PLAYER
   updateHitbox() {
     this.hitbox = {
@@ -226,8 +219,8 @@ export default class Player extends Sprite {
     };
   }
 
-// CHECK FOR CANVAS COLLISION FOR PLAYER
-checkForHorizontalCanvasCollision() {
+  // CHECK FOR CANVAS COLLISION FOR PLAYER
+  checkForHorizontalCanvasCollision() {
     if (
       this.hitbox.position.x + this.hitbox.width + this.velocity.x >= 1600 ||
       this.hitbox.position.x + this.velocity.x <= 0
@@ -336,7 +329,6 @@ checkForHorizontalCanvasCollision() {
     }
   }
 
-
   update() {
     this.updateFrames();
     this.updateHitbox();
@@ -351,6 +343,6 @@ checkForHorizontalCanvasCollision() {
     this.updateHitbox();
     this.CheckForVerticalCollisions();
     this.checkMovement();
-    this.checkForHorizontalCanvasCollision()
+    this.checkForHorizontalCanvasCollision();
   }
 }
