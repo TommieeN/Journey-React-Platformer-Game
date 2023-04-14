@@ -3,7 +3,8 @@ Welcome to my platformer game project! This game was created using React, JavaSc
 
 <img width="1440" alt="Screenshot 2023-04-14 at 11 34 16 AM" src="https://user-images.githubusercontent.com/123577810/232128704-684b555e-d5f8-470c-9209-494f3e1eda6e.png">
 
-<img width="1440" alt="Screenshot 2023-04-14 at 11 35 02 AM" src="https://user-images.githubusercontent.com/123577810/232128901-c53f4930-e882-4dd6-bb9b-95c424e2507f.png">
+![Screen Recording 2023-04-14 at 12 14 15 PM](https://user-images.githubusercontent.com/123577810/232136411-b14a3c81-6a73-4901-815c-39335881176d.gif)
+
 
 # Features #
 Move the character with the arrow keys
