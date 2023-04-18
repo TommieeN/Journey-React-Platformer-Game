@@ -18,8 +18,10 @@ Throughout this project, I learned the importance of keeping code clean and tidy
 To install, simply run npm install in your terminal.
 
 # Links #
-Connect with me on LinkedIn
-Check out my other projects on GitHub
+
+Connect with me on LinkedIn https://www.linkedin.com/in/tommy-nguyenn/
+
+Check out my other projects on GitHub https://github.com/TommieeN
 
 # Credits #
 
