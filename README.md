@@ -34,7 +34,7 @@ then ``npm start``
 
 Connect with me on LinkedIn https://www.linkedin.com/in/tommy-nguyenn/
 
-Check out my other projects on GitHub https://github.com/TommieeN
+FrontEnd mentor account https://www.frontendmentor.io/profile/TommieeN
 
 # Credits #
 
