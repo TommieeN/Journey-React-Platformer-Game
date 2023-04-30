@@ -12,10 +12,23 @@ Avoid flying enemies
 Finish the level by reaching the other side
 
 # Lessons Learned #
-Throughout this project, I learned the importance of keeping code clean and tidy, as I continued to add more and more functions and classes it soon became apparent that my code was getting a lot more harder to maintain. There was also very scarce info on building games with react, if I had spent more time researching game engines created on Github, it probably would have been beneficial. Next steps for this project include adding combat, where the player can slay enemies, adding more levels, implementing a backend to store game data like leaderboards and levels, and making it mobile-friendly.
+ <ul>
+  <li>Learned the importance of keeping code clean and tidy.</li>
+  <li> Spend more time researching game engines</li>
+  <li>Referencing seperate classes on to the canvas wasn't easy</li>
+</ul>
+
+# Next Steps #
+<ul> 
+  <li>Add combat</li>
+  <li>More levels</li>
+  <li>Backend to store leaderboards and levels</li>
+  <li>Mobile friendly</li>
+</ul>
 
 # Installation #
-To install, simply run npm install in your terminal.
+Install dependencies with `` npm install `` in your terminal.
+then ``npm start``
 
 # Links #
 
