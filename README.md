@@ -1,5 +1,7 @@
-## Journey #
+<h1>Journey</h1> 
 Welcome to my platformer game project! This game was created using React, JavaScript, Sass, Canvas API, Webpack and JSON. The map was created using a third party application called Tiled, which was then exported as a JSON file for collision block data and as an image for the background. The objective of the game is to move the character with the arrow keys, avoid the flying enemies, and get to the other side to finish the level.
+
+<h2><a href="https://647fe614ec115515d29a0e71--golden-nasturtium-3edb6f.netlify.app/">Deployment Link</a></h2>
 
 <img width="1440" alt="Screenshot 2023-04-14 at 11 34 16 AM" src="https://user-images.githubusercontent.com/123577810/232128704-684b555e-d5f8-470c-9209-494f3e1eda6e.png">
 
